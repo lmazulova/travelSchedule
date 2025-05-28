@@ -22,7 +22,9 @@ final class SearchStationsService: SearchStationsServiceProtocol {
             query: .init(
                 apikey: apikey,
                 from: from,
-                to: to
+                to: to,
+                date: "2025-05-27",
+                transfers: true
             )
         )
         return try response.ok.body.json

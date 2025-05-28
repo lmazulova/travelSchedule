@@ -107,7 +107,7 @@ func carrierInfo() {
     
     Task {
         do {
-            let carrierInfo = try await service.getCarrierInfo(code: "1100")
+            let carrierInfo = try await service.getCarrierInfo(code: "112")
             print("✅ Success:")
             print(carrierInfo)
         } catch {
