@@ -65,9 +65,11 @@ struct CarrierRow: View {
             }
         }
         .padding(14)
-        .frame(width: .infinity, height: stackHeight)
+        .frame(maxWidth: .infinity)
+        .frame(height: stackHeight)
         .background(Color.customLightGray)
         .clipShape(.rect(cornerRadius: 24))
+        .listRowBackground(Color.customWhite)
     }
 }
 

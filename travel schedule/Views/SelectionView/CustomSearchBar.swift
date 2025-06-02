@@ -37,8 +37,9 @@ struct CustomSearchBar: View {
                 }
             }
         }
-        .frame(width: .infinity, height: viewHeight)
-        .background(Color.customLightGray)
+        .frame(maxWidth: .infinity)
+        .frame(height: viewHeight)
+        .background(Color.customLightGrayDayAndNight)
         .clipShape(.rect(cornerRadius: 10))
         .padding(16)
     }

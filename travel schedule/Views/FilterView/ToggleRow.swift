@@ -4,11 +4,11 @@ struct ToggleRaw: View {
     let title: String
     private var rowHeight: Double = 60
     private let iconSize: Double = 24
-    @State var isSelected: Bool
+    @Binding var isSelected: Bool
     
-    init(title: String, isSelected: Bool) {
+    init(title: String, isSelected: Binding<Bool>) {
         self.title = title
-        self.isSelected = isSelected
+        self._isSelected = isSelected
     }
     
     var body: some View {
@@ -31,5 +31,5 @@ struct ToggleRaw: View {
 }
 
 #Preview {
-    ToggleRaw(title: "Да", isSelected: false)
+//    ToggleRaw(title: "Да", isSelected: false)
 }
