@@ -19,6 +19,11 @@ struct StationSelectionView: View {
         ZStack {
             Color.customWhite
                 .ignoresSafeArea()
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    UIApplication.shared.hideKeyboard()
+                }
+
             
             VStack {
                 CustomSearchBar(searchText: $viewModel.searchText)
@@ -70,9 +75,6 @@ struct StationSelectionView: View {
                     }
                 }
             }
-        }
-        .onTapGesture {
-            UIApplication.shared.hideKeyboard()
         }
     }
 }

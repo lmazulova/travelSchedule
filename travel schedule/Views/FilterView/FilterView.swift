@@ -58,15 +58,14 @@ struct FilterView: View {
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .background(Color.customBlue)
-                        .cornerRadius(16)
+                        .clipShape(.rect(cornerRadius: 16))
                         
                     }
                     .frame(height: 60)
                     .padding(.bottom, 24)
                 }
             }
-            .padding(.horizontal, 16)
-            .padding(.top, 16)
+            .padding([.top, .horizontal], 16)
             .padding(.bottom, 0)
             .navigationBarBackButtonHidden(true)
             .toolbar {

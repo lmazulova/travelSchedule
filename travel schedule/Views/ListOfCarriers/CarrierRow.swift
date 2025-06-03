@@ -48,7 +48,6 @@ struct CarrierRow: View {
                 Rectangle()
                     .fill(Color.customGray)
                     .frame(height: 1)
-                    .frame(maxWidth: .infinity)
                 
                 Text("\(serviceInfo.journeyTime) часов")
                     .font(.system(size: 12, weight: .regular))
@@ -57,7 +56,6 @@ struct CarrierRow: View {
                 Rectangle()
                     .fill(Color.customGray)
                     .frame(height: 1)
-                    .frame(maxWidth: .infinity)
                 
                 Text(serviceInfo.arrivalTime)
                     .font(.system(size: 17, weight: .regular))

@@ -1,6 +1,6 @@
 import Foundation
 
-class ThemeManager: ObservableObject {
+final class ThemeManager: ObservableObject {
     @Published var isDarkMode = false {
         didSet {
             UserDefaults.standard.set(isDarkMode, forKey: "isDarkMode")

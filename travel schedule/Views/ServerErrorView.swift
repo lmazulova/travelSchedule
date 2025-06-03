@@ -1,8 +1,8 @@
 import SwiftUI
 
 enum ErrorViewType: String {
-    case serverError = "serverError"
-    case networkError = "networkError"
+    case serverError
+    case networkError
 }
 
 struct ErrorView: View {

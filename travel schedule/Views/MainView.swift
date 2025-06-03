@@ -129,7 +129,7 @@ struct MainView: View {
                             .padding([.top, .bottom], 20)
                             .padding([.leading, .trailing], 47.5)
                             .background(Color.customBlue)
-                            .cornerRadius(16)
+                            .clipShape(.rect(cornerRadius: 16))
                     }
                     .frame(width: 150, height: 60)
                 }

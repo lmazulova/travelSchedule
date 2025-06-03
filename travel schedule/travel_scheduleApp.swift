@@ -3,14 +3,14 @@ import SwiftUI
 @main
 struct travel_scheduleApp: App {
     private let tabItemSize: Double = 30
-    @State private var path1 = NavigationPath()
-    @State private var path2 = NavigationPath()
+    @State var path1 = NavigationPath()
+    @State var path2 = NavigationPath()
     @StateObject private var themeManager = ThemeManager()
     
-    init() {
+    private func setupAppearance() {
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.configureWithOpaqueBackground()
-        tabBarAppearance.shadowColor = themeManager.isDarkMode ? .black : .customGray
+        tabBarAppearance.shadowColor = themeManager.isDarkMode ? .black : .customGray // Используйте .gray вместо .customGray
         tabBarAppearance.backgroundColor = UIColor(named: "customWhite")
         
         UITabBar.appearance().standardAppearance = tabBarAppearance
@@ -46,6 +46,9 @@ struct travel_scheduleApp: App {
             .tint(.customBlack)
             .environmentObject(themeManager)
             .preferredColorScheme(themeManager.isDarkMode ? .dark : .light)
+            .onAppear {
+                setupAppearance()
+            }
         }
     }
 }

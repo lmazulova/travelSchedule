@@ -32,6 +32,7 @@ struct UserAgreementView: View {
             }
             .navigationTitle("Пользовательское соглашение")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar(.hidden, for: .tabBar)
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -52,9 +53,9 @@ struct UserAgreementView: View {
 struct WebView: UIViewRepresentable {
     typealias UIViewType = WKWebView
     var urlToDisplay: URL?
-    @Binding public var isLoading: Bool
-    @Binding public var progress: Double
-    
+    @Binding var isLoading: Bool
+    @Binding var progress: Double
+    @EnvironmentObject var themeManager: ThemeManager
     public init(urlToDisplay: String, isLoading: Binding<Bool>, progress: Binding<Double>) {
         self.urlToDisplay = URL(string: urlToDisplay)
         self._isLoading = isLoading
@@ -65,12 +66,59 @@ struct WebView: UIViewRepresentable {
         let webView = WKWebView()
         webView.navigationDelegate = context.coordinator
         
-        if let urlWeb = urlToDisplay {
-            let request = URLRequest(url:urlWeb)
-            webView.load(request)
+        webView.overrideUserInterfaceStyle = themeManager.isDarkMode ? .dark : .light
+        
+        let style: String = themeManager.isDarkMode ? "dark" : "light"
+        
+        let lightModeCSS = """
+            :root {
+                color-scheme: light;
+            }
+            body {
+                background-color: #FFFFFF !important;
+                color: #000000 !important;
+            }
+            * {
+                background-color: inherit !important;
+                color: inherit !important;
+            }
+        """
+        
+        let darkModeCSS = """
+                    :root {
+                        color-scheme: light dark;
+                    }
+                    body {
+                        background-color: #121212 !important;
+                        color: #E0E0E0 !important;
+                    }
+                    * {
+                        background-color: inherit !important;
+                        color: inherit !important;
+                    }
+                """
+        
+        let colorModeCSS = themeManager.isDarkMode ? darkModeCSS : lightModeCSS
+        
+        let script = """
+                    var style = document.createElement('style');
+                    style.innerHTML = `\(colorModeCSS)`;
+                    document.head.appendChild(style);
+                    document.body.style.setProperty('color-scheme', '\(style)', 'important');
+                """
+        
+        let userScript = WKUserScript(
+            source: script,
+            injectionTime: .atDocumentEnd,
+            forMainFrameOnly: false
+        )
+        
+        webView.configuration.userContentController.addUserScript(userScript)
+        
+        if let url = urlToDisplay {
+            webView.load(URLRequest(url: url))
         }
-        let preferences = WKPreferences()
-        preferences.javaScriptCanOpenWindowsAutomatically = true
+        
         return webView
     }
     
@@ -78,8 +126,7 @@ struct WebView: UIViewRepresentable {
         Coordinator(self, isLoading: $isLoading)
     }
     
-   
-    class Coordinator: NSObject, WKNavigationDelegate {
+    final class Coordinator: NSObject, WKNavigationDelegate {
         var parent: WebView
         @Binding var isLoading: Bool
         
@@ -111,5 +158,5 @@ struct WebView: UIViewRepresentable {
 
 
 #Preview {
-//    UserAgreementView()
+    //    UserAgreementView()
 }

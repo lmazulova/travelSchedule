@@ -28,7 +28,10 @@ struct CustomSearchBar: View {
                 .font(.system(size: 17, weight: .regular))
                 .foregroundStyle(Color.customBlack)
             if !searchText.isEmpty {
-                Button(action: {searchText = "" }) {
+                Button(action: {
+                    searchText = ""
+                    UIApplication.shared.hideKeyboard()
+                }) {
                     Image("clear")
                         .resizable()
                         .aspectRatio(contentMode: .fit)

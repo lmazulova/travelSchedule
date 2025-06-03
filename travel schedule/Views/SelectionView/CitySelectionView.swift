@@ -24,6 +24,10 @@ struct CitySelectionView: View {
         ZStack {
             Color.customWhite
                 .ignoresSafeArea()
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    UIApplication.shared.hideKeyboard()
+                }
             
             VStack {
                 CustomSearchBar(searchText: $viewModel.searchText)
@@ -79,9 +83,6 @@ struct CitySelectionView: View {
             }
         }
         .toolbar(.hidden, for: .tabBar)
-        .onTapGesture {
-            UIApplication.shared.hideKeyboard()
-        }
     }
 }
 

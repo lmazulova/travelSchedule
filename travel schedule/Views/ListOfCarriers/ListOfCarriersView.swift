@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ListOfCarriersView: View {
-    let title: String
+    private let title: String
     @StateObject var viewModel = MockViewModel()
     @Binding var path: NavigationPath
     @ObservedObject var filterViewModel: FilterViewModel
@@ -53,7 +53,7 @@ struct ListOfCarriersView: View {
                             Text("Уточнить время")
                                 .font(.system(size: 17, weight: .bold))
                                 .foregroundColor(.white)
-                            if filterViewModel.isTransfer == true || !filterViewModel.selectedTime.isEmpty {
+                            if filterViewModel.isTransfer || !filterViewModel.selectedTime.isEmpty {
                                 Circle()
                                     .fill(Color.customRed)
                                     .frame(width: 8, height: 8)
@@ -61,7 +61,7 @@ struct ListOfCarriersView: View {
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .background(Color.customBlue)
-                        .cornerRadius(16)
+                        .clipShape(.rect(cornerRadius: 16))
                         
                     }
                     .frame(height: 60)

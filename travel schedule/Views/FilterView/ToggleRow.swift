@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ToggleRaw: View {
-    let title: String
+    private let title: String
     private var rowHeight: Double = 60
     private let iconSize: Double = 24
     @Binding var isSelected: Bool

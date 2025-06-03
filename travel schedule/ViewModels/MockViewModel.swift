@@ -1,6 +1,6 @@
 import SwiftUI
 
-class MockViewModel: ObservableObject {
+final class MockViewModel: ObservableObject {
     @Published var searchText = ""
     
     @Published var foundRoutes: [ServiceInformation] = [
