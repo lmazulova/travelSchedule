@@ -1,8 +1,8 @@
 //
 //  ContentView.swift
-//  travel schedule
+//  test
 //
-//  Created by user on 18.05.2025.
+//  Created by user on 03.06.2025.
 //
 
 import SwiftUI
