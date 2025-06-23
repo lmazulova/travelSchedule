@@ -2,12 +2,12 @@ import SwiftUI
 
 struct CarrierInfoView: View {
     @Binding var path: NavigationPath
-    let carrierInfo: CarrierInfoModel
+    let carrierInfo: CarrierInfo
     
     private let stackHeight: Double = 60
     private let logoHeight: Double = 104
     
-    init(carrierInfo: CarrierInfoModel, path: Binding<NavigationPath>) {
+    init(carrierInfo: CarrierInfo, path: Binding<NavigationPath>) {
         self.carrierInfo = carrierInfo
         self._path = path
     }

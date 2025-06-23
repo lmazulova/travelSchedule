@@ -20,7 +20,7 @@ struct travel_scheduleApp: App {
     var body: some Scene {
         
         WindowGroup {
-            TabView {
+        TabView {
                 ZStack {
                     NavigationStack(path: $path1) {
                         MainView(path: $path1)
