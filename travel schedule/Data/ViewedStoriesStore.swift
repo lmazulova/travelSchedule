@@ -28,13 +28,13 @@ class ViewedStoriesStore: ObservableObject {
     }
     
     private func save() {
-        let array = Array(viewedIDs)
+        let array = Array(viewedIDs).map { $0.uuidString }
         UserDefaults.standard.set(array, forKey: key)
     }
     
     private func load() {
-        if let array = UserDefaults.standard.array(forKey: key) as? [UUID] {
-            viewedIDs = Set(array)
+        if let array = UserDefaults.standard.array(forKey: key) as? [String] {
+            viewedIDs = Set(array.compactMap { UUID(uuidString: $0) })
         }
     }
 }

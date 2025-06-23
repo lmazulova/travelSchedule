@@ -13,7 +13,8 @@ enum StoryConstants {
 }
 
 struct StoriesPreviewCollection: View {
-    @StateObject var viewedStories = ViewedStoriesStore()
+    @EnvironmentObject var viewedStories: ViewedStoriesStore
+    @State private var selectedStories: Stories? = nil
     
     private let stories: [Stories] = [.stories1, .stories2, .stories3, .stories4, .stories5, .stories6, .stories7, .stories8, .stories9]
     
@@ -24,14 +25,21 @@ struct StoriesPreviewCollection: View {
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 12) {
-                ForEach(stories) { story in
-//                  мне кажется force unwrap здесь не критичен, т.к. у нас захардкоженные данные
-                    let firstScreen = story.storiesScreens.first!
-                    StoriesPreviewRow(story: firstScreen, isSeen: viewedStories.isViewed(firstScreen.id))
+                ForEach(stories) { stories in
+                    StoriesPreviewRow(story: stories, isSeen: viewedStories.isViewed(stories.id))
+                        .onTapGesture {
+                            selectedStories = stories
+                        }
                 }
             }
         }
         .frame(height: StoryConstants.rowHeight)
+        .fullScreenCover(item: $selectedStories){ stories in
+            StoriesView(stories: stories.storiesScreens)
+                .onDisappear {
+                    viewedStories.markAsViewed(stories.id)
+                }
+        }
     }
 }
 

@@ -8,16 +8,17 @@
 import SwiftUI
 
 struct StoriesTabView: View {
-    let stories: [Story]
+    let stories: [StoriesScreen]
     @Binding var currentStoryIndex: Int
 
     var body: some View {
         TabView(selection: $currentStoryIndex) {
-            ForEach(stories) { story in
+            ForEach(Array(stories.enumerated()), id: \.element.id) { index, story in
                 StoryView(story: story)
                     .onTapGesture {
                         didTapStory()
                     }
+                    .tag(index)
             }
         }
         .ignoresSafeArea()

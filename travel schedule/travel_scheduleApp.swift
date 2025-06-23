@@ -6,6 +6,7 @@ struct travel_scheduleApp: App {
     @State var path1 = NavigationPath()
     @State var path2 = NavigationPath()
     @StateObject private var themeManager = ThemeManager()
+    @StateObject var viewedStories = ViewedStoriesStore()
     
     private func setupAppearance() {
         let tabBarAppearance = UITabBarAppearance()
@@ -45,6 +46,7 @@ struct travel_scheduleApp: App {
             }
             .tint(.customBlack)
             .environmentObject(themeManager)
+            .environmentObject(viewedStories)
             .preferredColorScheme(themeManager.isDarkMode ? .dark : .light)
             .onAppear {
                 setupAppearance()

@@ -17,9 +17,11 @@ struct StoriesPreviewRow: View {
     private let isSeen: Bool
     private let imageRadius: CGFloat = 16
     
-    init(story: StoriesScreen, isSeen: Bool) {
-        description = story.description
-        imageView = story.image
+    init(story: Stories, isSeen: Bool) {
+        //мне кажется force unwrap здесь не критичен, т.к. у нас захардкоженные данные
+        let firstScreen = story.storiesScreens.first!
+        description = firstScreen.description
+        imageView = firstScreen.image
         self.isSeen = isSeen
     }
     
@@ -37,6 +39,7 @@ struct StoriesPreviewRow: View {
                         .frame(width: rowWidth - lineWidth, height: rowHeight - lineWidth)
                 )
                 .opacity(isSeen ? 0.5 : 1.0)
+                .animation(.easeInOut, value: isSeen)
             
             Text(description)
                 .font(.system(size: 12, weight: .regular))
@@ -49,7 +52,7 @@ struct StoriesPreviewRow: View {
 }
 
 #Preview {
-    let story = StoriesScreen(title: "Sample Story", description: "This is a sample story description for view.", image: Image("firstImage1"))
-    StoriesPreviewRow(story: story, isSeen: true)
-    StoriesPreviewRow(story: story, isSeen: false)
+//    let story = StoriesScreen(title: "Sample Story", description: "This is a sample story description for view.", image: Image("firstImage1"))
+//    StoriesPreviewRow(story: story, isSeen: true)
+//    StoriesPreviewRow(story: story, isSeen: false)
 }

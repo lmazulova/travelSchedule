@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct StoryView: View {
-    private let story: StoriesScreen = StoriesScreen(title: "Sample Story", description: "This is a sample story description for view. This is a sample story description for view.", image: Image("firstImage1"))
+    let story: StoriesScreen
+    
     var body: some View {
         ZStack {
             Color.blackUniversal
@@ -38,5 +39,5 @@ struct StoryView: View {
 }
 
 #Preview {
-    StoryView()
+//    StoryView()
 }

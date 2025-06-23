@@ -29,7 +29,7 @@ struct MainView: View {
     @StateObject private var filterViewModel = FilterViewModel()
     @State private var from: DeparturePoint = DeparturePoint(city: "", station: "")
     @State private var to: DeparturePoint = DeparturePoint(city: "", station: "")
-    
+    @State private var showFindButton: Bool = false
     private var isFindButtonEnabled: Bool {
         !from.city.isEmpty && !to.city.isEmpty && !from.station.isEmpty && !to.station.isEmpty
     }
@@ -54,15 +54,21 @@ struct MainView: View {
                     .padding(.horizontal, 16)
                     .padding(.top, 20)
                 
-                if isFindButtonEnabled {
+                if showFindButton {
                     FindButton {
                         path.append(Destination.listOfCarriers)
                     }
+                    .transition(.opacity.combined(with: .scale))
                 }
                 
                 Spacer()
             }
             .frame(maxHeight: .infinity, alignment: .top)
+            .onChange(of: isFindButtonEnabled, initial: true) { _, enabled in
+                withAnimation {
+                    showFindButton = enabled
+                }
+            }
         }
         .navigationDestination(for: Destination.self) { destination in
             NavigationDestinationView(
