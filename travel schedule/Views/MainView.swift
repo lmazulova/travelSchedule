@@ -44,7 +44,7 @@ struct MainView: View {
             Color.customWhite
                 .ignoresSafeArea()
             VStack {
-                StoriesCollection()
+                StoriesPreviewCollection()
                     .padding(.vertical, 24)
                     .padding(.leading, 16)
                 

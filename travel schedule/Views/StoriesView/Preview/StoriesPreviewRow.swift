@@ -8,16 +8,19 @@
 
 import SwiftUI
 
-struct StoriesRow: View {
+struct StoriesPreviewRow: View {
     private let rowHeight: Double = 140
     private let rowWidth: Double = 92
+    private let lineWidth: Double = 4
     private let description: String
     private let imageView: Image
-    private let isSeen: Bool = true
+    private let isSeen: Bool
+    private let imageRadius: CGFloat = 16
     
-    init(story: Story) {
+    init(story: StoriesScreen, isSeen: Bool) {
         description = story.description
         imageView = story.image
+        self.isSeen = isSeen
     }
     
     var body: some View {
@@ -26,10 +29,12 @@ struct StoriesRow: View {
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: StoryConstants.rowWidth, height: StoryConstants.rowHeight)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .clipShape(RoundedRectangle(cornerRadius: imageRadius))
                 .overlay(
-                    RoundedRectangle(cornerRadius: 16)
-                        .stroke(isSeen ? Color.clear : Color.customBlue, lineWidth: 4)
+                    // От радиуса изображения нужно отнять половину ширины линии, чтобы углы изображения и обводки совпадали.
+                    RoundedRectangle(cornerRadius: imageRadius - lineWidth/2)
+                        .stroke(isSeen ? Color.clear : Color.customBlue, lineWidth: lineWidth)
+                        .frame(width: rowWidth - lineWidth, height: rowHeight - lineWidth)
                 )
                 .opacity(isSeen ? 0.5 : 1.0)
             
@@ -44,6 +49,7 @@ struct StoriesRow: View {
 }
 
 #Preview {
-    let story = Story(title: "Sample Story", description: "This is a sample story description for view.", image: Image("firstImage1"))
-    StoriesRow(story: story)
+    let story = StoriesScreen(title: "Sample Story", description: "This is a sample story description for view.", image: Image("firstImage1"))
+    StoriesPreviewRow(story: story, isSeen: true)
+    StoriesPreviewRow(story: story, isSeen: false)
 }
