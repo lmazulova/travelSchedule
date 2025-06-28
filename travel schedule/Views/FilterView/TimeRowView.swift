@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct TimeRaw: View {
+struct TimeRowView: View {
     let time: TimeRange
     private var rowHeight: Double = 60
     private let iconSize: Double = 24
@@ -37,5 +37,12 @@ struct TimeRaw: View {
 }
 
 #Preview {
-//    TimeRaw(title: "Утро 06:00 - 12:00", isSelected: false)
+    struct TimeRowViewPreviews: View {
+        @State private var selectedTime: Set<TimeRange> = []
+        var body: some View {
+            TimeRowView(time: .morning, selectedTime: $selectedTime)
+        }
+    }
+    
+    return TimeRowViewPreviews()
 }
