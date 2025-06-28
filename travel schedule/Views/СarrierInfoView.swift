@@ -14,84 +14,97 @@ struct CarrierInfoView: View {
     
     var body: some View {
         ZStack {
-            Color.customWhite
-                .ignoresSafeArea()
+            backgroundView
+            contentView
+        }
+        .navigationTitle("Информация о перевозчике")
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                backButton
+            }
+        }
+    }
+    
+    //MARK: - UI Elements
+    private var contentView: some View {
+        VStack(spacing: 16) {
+            logoView
+            titleView
+            contactStack
+            Spacer()
+        }
+        .padding(16)
+    }
+    
+    private var backgroundView: some View {
+        Color.customWhite
+            .ignoresSafeArea()
+    }
+    
+    private var logoView: some View {
+        Group {
+            if let imageURL = carrierInfo.imageURL {
+                AsyncImage(url: imageURL) { content in
+                    content.image?
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(height: logoHeight)
+                        .padding([.leading, .trailing], 16)
+                }
+                .background(Color.white)
+                .clipShape(.rect(cornerRadius: 24))
+            }
+        }
+    }
+    
+    private var titleView: some View {
+        Text(carrierInfo.title)
+            .font(.system(size: 24, weight: .bold))
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .foregroundColor(.customBlack)
+    }
+    
+    private var contactStack: some View {
+        VStack {
+            contactItem(title: "E-mail", value: carrierInfo.email)
+            contactItem(title: "Телефон", value: carrierInfo.phoneNumber)
+        }
+    }
+    
+    private func contactItem(title: String, value: String) -> some View {
+        VStack {
+            Text(title)
+                .font(.system(size: 17, weight: .regular))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .foregroundColor(.customBlack)
             
-            VStack(spacing: 16) {
-                if let imageURL = carrierInfo.imageURL {
-                    AsyncImage(url: imageURL) { content in
-                        content.image?
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(height: logoHeight)
-                            .padding([.leading, .trailing], 16)
-                    }
-                    .background(Color.white)
-                    .clipShape(.rect(cornerRadius: 24))
-                }
-                
-                Text(carrierInfo.title)
-                    .font(.system(size: 24, weight: .bold))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .foregroundColor(.customBlack)
-                
-                VStack {
-                    VStack {
-                        Text("E-mail")
-                            .font(.system(size: 17, weight: .regular))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .foregroundColor(.customBlack)
-                        
-                        Text(carrierInfo.email)
-                            .font(.system(size: 12, weight: .regular))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .foregroundColor(.customBlue)
-                    }
-                    .frame(height: stackHeight)
-                    
-                    VStack {
-                        Text("Телефон")
-                            .font(.system(size: 17, weight: .regular))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .foregroundColor(.customBlack)
-                        
-                        Text(carrierInfo.phoneNumber)
-                            .font(.system(size: 12, weight: .regular))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .foregroundColor(.customBlue)
-                    }
-                    .frame(height: stackHeight)
-                }
-                
-                Spacer()
-            }
-            .padding(16)
-            .navigationTitle("Информация о перевозчике")
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        path.removeLast()
-                    } label: {
-                        Image("backArrow")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 17, height: 22)
-                    }
-                }
-            }
+            Text(value)
+                .font(.system(size: 12, weight: .regular))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .foregroundColor(.customBlue)
+        }
+        .frame(height: stackHeight)
+    }
+    
+    private var backButton: some View {
+        Button {
+            path.removeLast()
+        } label: {
+            Image("backArrow")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 17, height: 22)
         }
     }
 }
 
 #Preview {
-//    CarrierInfoView(
-//        carrierInfo: CarrierInfoModel(
-//            title: "Аэрофлот",
-//            email: "callcenter@aeroflot.ru",
-//            phoneNumber: "+7 (495) 223-55-55",
-//            imageURL: URL(string: "https://yastat.net/s3/rasp/media/data/company/logo/aeroflot_logo_ru.gif")
-//        )
-//    )
+    NavigationStack {
+        CarrierInfoView(
+            carrierInfo: CarrierInfo.mock,
+            path: .constant(NavigationPath())
+        )
+    }
 }

@@ -40,23 +40,20 @@ struct ProgressBar: View {
     }
 }
 
-private struct MaskView: View {
-    let numberOfSections: Int
-
-    var body: some View {
-        HStack {
-            ForEach(0..<numberOfSections, id: \.self) { _ in
-                MaskFragmentView()
-            }
-        }
-    }
-}
-
-private struct MaskFragmentView: View {
-    var body: some View {
-        RoundedRectangle(cornerRadius: .progressBarCornerRadius)
-            .fixedSize(horizontal: false, vertical: true)
+#Preview {
+    VStack(spacing: 20) {
+        ProgressBar(numberOfSections: 5, progress: 0.2)
             .frame(height: .progressBarHeight)
-            .foregroundStyle(.white)
+            .padding()
+
+        ProgressBar(numberOfSections: 5, progress: 0.5)
+            .frame(height: .progressBarHeight)
+            .padding()
+
+        ProgressBar(numberOfSections: 5, progress: 0.8)
+            .frame(height: .progressBarHeight)
+            .padding()
     }
+    .background(Color.gray.opacity(0.2))
+    .frame(width: 200)
 }

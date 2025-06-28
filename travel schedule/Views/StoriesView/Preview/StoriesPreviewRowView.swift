@@ -8,20 +8,21 @@
 
 import SwiftUI
 
-struct StoriesPreviewRow: View {
-    private let rowHeight: Double = 140
-    private let rowWidth: Double = 92
-    private let lineWidth: Double = 4
+private extension CGFloat {
+    static let storiesRowHeight: CGFloat = 140
+    static let storiesRowWidth: CGFloat = 92
+    static let storiesLineWidth: CGFloat = 4
+    static let storiesImageRadius: CGFloat = 16
+}
+
+struct StoriesPreviewRowView: View {
     private let description: String
     private let imageView: Image
     private let isSeen: Bool
-    private let imageRadius: CGFloat = 16
     
-    init(story: Stories, isSeen: Bool) {
-        //мне кажется force unwrap здесь не критичен, т.к. у нас захардкоженные данные
-        let firstScreen = story.storiesScreens.first!
-        description = firstScreen.description
-        imageView = firstScreen.image
+    init(story: Story, isSeen: Bool) {
+        description = story.storiesScreens[0].description
+        imageView = story.storiesScreens[0].image
         self.isSeen = isSeen
     }
     
@@ -31,12 +32,12 @@ struct StoriesPreviewRow: View {
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: StoryConstants.rowWidth, height: StoryConstants.rowHeight)
-                .clipShape(RoundedRectangle(cornerRadius: imageRadius))
+                .clipShape(RoundedRectangle(cornerRadius: .storiesImageRadius))
                 .overlay(
                     // От радиуса изображения нужно отнять половину ширины линии, чтобы углы изображения и обводки совпадали.
-                    RoundedRectangle(cornerRadius: imageRadius - lineWidth/2)
-                        .stroke(isSeen ? Color.clear : Color.customBlue, lineWidth: lineWidth)
-                        .frame(width: rowWidth - lineWidth, height: rowHeight - lineWidth)
+                    RoundedRectangle(cornerRadius: .storiesImageRadius - .storiesLineWidth/2)
+                        .stroke(isSeen ? Color.clear : Color.customBlue, lineWidth: .storiesLineWidth)
+                        .frame(width: .storiesRowWidth - .storiesLineWidth, height: .storiesRowHeight - .storiesLineWidth)
                 )
                 .opacity(isSeen ? 0.5 : 1.0)
                 .animation(.easeInOut, value: isSeen)
@@ -52,7 +53,10 @@ struct StoriesPreviewRow: View {
 }
 
 #Preview {
-//    let story = StoriesScreen(title: "Sample Story", description: "This is a sample story description for view.", image: Image("firstImage1"))
-//    StoriesPreviewRow(story: story, isSeen: true)
-//    StoriesPreviewRow(story: story, isSeen: false)
+    HStack(spacing: 12) {
+        StoriesPreviewRowView(story: .story1, isSeen: false)
+        StoriesPreviewRowView(story: .story1, isSeen: true)
+    }
+    .padding()
+    .background(Color.gray.opacity(0.2))
 }

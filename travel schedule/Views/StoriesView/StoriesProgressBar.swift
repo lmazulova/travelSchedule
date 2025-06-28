@@ -49,3 +49,22 @@ extension StoriesProgressBar {
         Timer.publish(every: configuration.timerTickInternal, on: .main, in: .common)
     }
 }
+
+
+#Preview {
+    struct StoriesProgressBarPreviewWrapper: View {
+        @State private var progress: CGFloat = 0.0
+        
+        var body: some View {
+            StoriesProgressBar(
+                storiesCount: 5,
+                timerConfiguration: TimerConfiguration(storiesCount: 5, secondsPerStory: 5, timerTickInternal: 0.5),
+                currentProgress: $progress
+            )
+            .frame(height: 20)
+            .background(Color.gray.opacity(0.2))
+        }
+    }
+    
+    return StoriesProgressBarPreviewWrapper()
+}

@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ListOfCarriersView: View {
     private let title: String
-    @StateObject var viewModel = MockViewModel()
+    @StateObject var viewModel = SelectionDataViewModelMock()
     @Binding var path: NavigationPath
     @ObservedObject var filterViewModel: FilterViewModel
     

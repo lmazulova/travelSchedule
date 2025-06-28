@@ -3,7 +3,7 @@ import SwiftUI
 struct CitySelectionView: View {
     private let iconSize: Double = 24
     private let rowHeight: Double = 60
-    @StateObject var viewModel = MockViewModel()
+    @StateObject var viewModel = SelectionDataViewModelMock()
     @Binding var selectedCity: String
     @Binding var selectedStation: String
     @Binding var path: NavigationPath
