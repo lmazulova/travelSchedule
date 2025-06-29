@@ -2,6 +2,8 @@ import SwiftUI
 
 struct CarrierInfoView: View {
     @Binding var path: NavigationPath
+    @StateObject private var viewModel = CarrierInfoViewModel()
+    
     let carrierInfo: CarrierInfo
     
     private let stackHeight: Double = 60
@@ -15,7 +17,14 @@ struct CarrierInfoView: View {
     var body: some View {
         ZStack {
             backgroundView
-            contentView
+            if viewModel.isLoading {
+                ProgressView()
+                    .scaleEffect(1.5)
+            } else if let error = viewModel.errorType {
+                ErrorView(errorType: error)
+            } else {
+                contentView
+            }
         }
         .navigationTitle("Информация о перевозчике")
         .navigationBarTitleDisplayMode(.inline)
@@ -24,6 +33,9 @@ struct CarrierInfoView: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 backButton
             }
+        }
+        .task {
+            await viewModel.getCarrierInfo()
         }
     }
     

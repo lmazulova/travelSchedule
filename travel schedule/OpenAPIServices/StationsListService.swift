@@ -1,10 +1,11 @@
 import OpenAPIRuntime
 import OpenAPIURLSession
+import Foundation
 
 typealias StationsList = Components.Schemas.StationsListResponce
 
 protocol StationsListServiceProtocol {
-    func getStationsList() async throws -> HTTPBody
+    func getStationsList() async throws -> StationsListResponse
 }
 
 final class StationsListService: StationsListServiceProtocol {
@@ -12,19 +13,50 @@ final class StationsListService: StationsListServiceProtocol {
     private let client: Client
     private let apikey: String
     
-    init(client: Client, apikey: String) {
-        self.client = client
-        self.apikey = apikey
+    init() {
+        self.client = Client(
+            serverURL: try! Servers.Server1.url(),
+            transport: URLSessionTransport()
+        )
+        self.apikey = APIKeyStore.shared.getAPIKey()
     }
     
-    func getStationsList() async throws -> HTTPBody {
-        let response = try await client.getStationsList(
-            query: .init(
-                apikey: apikey,
-                format: "json"
+    func getSettlementsListForTrain() async throws -> [Settlement] {
+        let response = try await fetchStationList()
+        allSettlements.filter($0.)
+    }
+    
+    func fetchStationList() async throws -> StationsListResponse {
+        do {
+            let response = try await client.getStationsList(
+                query: .init(
+                    apikey: apikey,
+                    format: "json"
+                )
             )
-        )
-        return try response.ok.body.html
+            let htmlBody = try response.ok.body.html
+            let htmlData = try await collectData(from: htmlBody)
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            let result = try decoder.decode(StationsListResponse.self, from: htmlData)
+            return result
+        } catch {
+            if error is OpenAPIRuntime.ClientError {
+                print("Client error: \(error)")
+                throw ErrorViewType.networkError
+            } else {
+                print("Server error: \(error)")
+                throw ErrorViewType.serverError
+            }
+        }
+    }
+    
+    private func collectData(from body: HTTPBody) async throws -> Data {
+        var data = Data()
+        for try await chunk in body {
+            data.append(contentsOf: chunk)
+        }
+        return data
     }
 }
 

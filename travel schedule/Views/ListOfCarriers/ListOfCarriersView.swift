@@ -4,12 +4,12 @@ struct ListOfCarriersView: View {
     private let title: String
     @StateObject var viewModel = SelectionDataViewModelMock()
     @Binding var path: NavigationPath
-    @ObservedObject var filterViewModel: FilterViewModel
+//    @ObservedObject var filterViewModel: FilterViewModel
     
-    init(title: String, path: Binding<NavigationPath>, filterViewModel: FilterViewModel) {
+    init(title: String, path: Binding<NavigationPath>) {
         self.title = title
         self._path = path
-        self._filterViewModel = ObservedObject(wrappedValue: filterViewModel)
+//        self._filterViewModel = ObservedObject(wrappedValue: filterViewModel)
     }
     var body: some View {
         ZStack {
@@ -53,11 +53,11 @@ struct ListOfCarriersView: View {
                             Text("Уточнить время")
                                 .font(.system(size: 17, weight: .bold))
                                 .foregroundColor(.white)
-                            if filterViewModel.isTransfer || !filterViewModel.selectedTime.isEmpty {
-                                Circle()
-                                    .fill(Color.customRed)
-                                    .frame(width: 8, height: 8)
-                            }
+//                            if filterViewModel.isTransfer || !filterViewModel.selectedTime.isEmpty {
+//                                Circle()
+//                                    .fill(Color.customRed)
+//                                    .frame(width: 8, height: 8)
+//                            }
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .background(Color.customBlue)

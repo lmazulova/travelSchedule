@@ -93,28 +93,28 @@ func nearestSettlement() {
     }
 }
 
-func carrierInfo() {
-    let client = Client(
-        serverURL: try! Servers.Server1.url(),
-        transport: URLSessionTransport()
-    )
-    
-    let service = CarrierInfoService(
-        client: client,
-        apikey: "d0eeeb52-67fa-48f2-8131-c568596dca7c"
-    )
-    
-    
-    Task {
-        do {
-            let carrierInfo = try await service.getCarrierInfo(code: "112")
-            print("✅ Success:")
-            print(carrierInfo)
-        } catch {
-            print("❌ Error:", error)
-        }
-    }
-}
+//func carrierInfo() {
+//    let client = Client(
+//        serverURL: try! Servers.Server1.url(),
+//        transport: URLSessionTransport()
+//    )
+//    
+//    let service = CarrierInfoService(
+//        client: client,
+//        apikey: "d0eeeb52-67fa-48f2-8131-c568596dca7c"
+//    )
+//    
+//    
+//    Task {
+//        do {
+//            let carrierInfo = try await service.getCarrierInfo(code: "112")
+//            print("✅ Success:")
+//            print(carrierInfo)
+//        } catch {
+//            print("❌ Error:", error)
+//        }
+//    }
+//}
 
 func copyright() {
     let client = Client(
@@ -162,25 +162,25 @@ func stationSchedule() {
     }
 }
 
-func stationsList() {
-    let client = Client(
-        serverURL: try! Servers.Server1.url(),
-        transport: URLSessionTransport()
-    )
-    
-    let service = StationsListService(
-        client: client,
-        apikey: "d0eeeb52-67fa-48f2-8131-c568596dca7c"
-    )
-    
-    
-    Task {
-        do {
-            let stationsList = try await service.getStationsList()
-            print("✅ Success:")
-            print(stationsList)
-        } catch {
-            print("❌ Error:", error)
-        }
-    }
-}
+//func stationsList() {
+//    let client = Client(
+//        serverURL: try! Servers.Server1.url(),
+//        transport: URLSessionTransport()
+//    )
+//    
+//    let service = StationsListService(
+//        client: client,
+//        apikey: "d0eeeb52-67fa-48f2-8131-c568596dca7c"
+//    )
+//    
+//    
+//    Task {
+//        do {
+//            let stationsList = try await service.getStationsList()
+//            print("✅ Success:")
+//            print(stationsList)
+//        } catch {
+//            print("❌ Error:", error)
+//        }
+//    }
+//}

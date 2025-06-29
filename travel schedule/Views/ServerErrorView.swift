@@ -1,6 +1,6 @@
 import SwiftUI
 
-enum ErrorViewType: String {
+enum ErrorViewType: String, Error {
     case serverError
     case networkError
     

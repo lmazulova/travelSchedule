@@ -14,17 +14,22 @@ final class MainViewModel: ObservableObject {
             updateFindButtonVisibility()
         }
     }
-    
     @Published var to: DeparturePoint = DeparturePoint(city: "", station: "") {
         didSet {
             updateFindButtonVisibility()
         }
     }
-    
     @Published var showFindButton: Bool = false
+    @Published var selectionViewModel: SelectionViewModel
     
-    func changeDeparturePoints() {
-        (from, to) = (to, from)
+    private let stationListService: StationsListServiceProtocol
+    
+    init(stationListService: StationsListServiceProtocol = StationsListService()) {
+        self.stationListService = stationListService
+        self.selectionViewModel = SelectionViewModel(allSettlements: [])
+        Task {
+            await loadSettlements()
+        }
     }
     
     var isFindButtonEnabled: Bool {
@@ -32,9 +37,24 @@ final class MainViewModel: ObservableObject {
         !from.station.isEmpty && !to.station.isEmpty
     }
     
+    func changeDeparturePoints() {
+        (from, to) = (to, from)
+    }
+    
     private func updateFindButtonVisibility() {
         withAnimation {
             showFindButton = isFindButtonEnabled
+        }
+    }
+    
+    private func loadSettlements() async {
+        do {
+            let response = try await stationListService.getStationsList()
+            let allSettlements = response.settlements
+            selectionViewModel.allSettlements = allSettlements
+        } catch {
+            print("Ошибка загрузки settlements: \(error)")
+            selectionViewModel.allSettlements = []
         }
     }
 }
