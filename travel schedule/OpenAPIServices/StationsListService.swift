@@ -5,7 +5,8 @@ import Foundation
 typealias StationsList = Components.Schemas.StationsListResponce
 
 protocol StationsListServiceProtocol {
-    func getStationsList() async throws -> StationsListResponse
+    func fetchStationList() async throws -> StationsListResponse
+    func getSettlementsListForTrain() async throws -> [Settlement]
 }
 
 final class StationsListService: StationsListServiceProtocol {
@@ -23,7 +24,17 @@ final class StationsListService: StationsListServiceProtocol {
     
     func getSettlementsListForTrain() async throws -> [Settlement] {
         let response = try await fetchStationList()
-        allSettlements.filter($0.)
+        let russianSettlements: [Settlement] = response.countries.filter{ $0.title == "Россия" }.flatMap { $0.settlements }
+        
+        let result = russianSettlements.map { settlement in
+            let trainStations = settlement.stations.filter { $0.transportType == "train" }
+            return Settlement(
+                title: settlement.title,
+                stations: trainStations
+            )
+        }.filter { !$0.stations.isEmpty && !$0.title.isEmpty}
+        
+        return result
     }
     
     func fetchStationList() async throws -> StationsListResponse {

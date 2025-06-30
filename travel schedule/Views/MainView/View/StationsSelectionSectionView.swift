@@ -16,6 +16,8 @@ struct StationsSelectionSection: View {
     @Binding var from: DeparturePoint
     @Binding var to: DeparturePoint
     var change: () -> Void
+    var onToTap: () -> Void
+    var onFromTap: () -> Void
     
     var body: some View {
         HStack {
@@ -28,6 +30,9 @@ struct StationsSelectionSection: View {
                             .foregroundColor(from.station.isEmpty ? .customGray : .black)
                             .lineLimit(1)
                     }
+                    .simultaneousGesture(TapGesture().onEnded {
+                        onFromTap()
+                    })
                     
                     NavigationLink(value: Destination.to) {
                         Text(to.station.isEmpty ? "Куда" : "\(to.city) (\(to.station))")
@@ -36,6 +41,9 @@ struct StationsSelectionSection: View {
                             .foregroundColor(to.station.isEmpty ? .customGray : .black)
                             .lineLimit(1)
                     }
+                    .simultaneousGesture(TapGesture().onEnded {
+                        onToTap()
+                    })
                 }
                 .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 13))
                 .frame(maxWidth: .infinity, alignment: .leading)

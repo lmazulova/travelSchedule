@@ -3,21 +3,14 @@ import SwiftUI
 struct CitySelectionView: View {
     private let iconSize: Double = 24
     private let rowHeight: Double = 60
-    @StateObject var viewModel = SelectionDataViewModelMock()
-    @Binding var selectedCity: String
-    @Binding var selectedStation: String
     @Binding var path: NavigationPath
     var destination: Destination
-    @State private var previousSelectedCity: String
-    @State private var previousSelectedStation: String
+    @StateObject private var viewModel: SelectionViewModel
     
-    init(destination: Destination, selectedCity: Binding<String>, selectedStation: Binding<String>, path: Binding<NavigationPath>) {
+    init(path: Binding<NavigationPath>, destination: Destination, viewModel: SelectionViewModel) {
         self.destination = destination
-        self._selectedCity = selectedCity
-        self._selectedStation = selectedStation
         self._path = path
-        self._previousSelectedCity = State(initialValue: selectedCity.wrappedValue)
-        self._previousSelectedStation = State(initialValue: selectedStation.wrappedValue)
+        self._viewModel = StateObject(wrappedValue: viewModel)
     }
     
     var body: some View {
@@ -30,12 +23,17 @@ struct CitySelectionView: View {
                 }
             
             VStack {
-                CustomSearchBar(searchText: $viewModel.searchText)
+                CustomSearchBar(searchText: $viewModel.searchSettlementText)
                 
-                if !viewModel.filteredCities.isEmpty {
-                    List(viewModel.filteredCities, id: \.self) { city in
+                if viewModel.isLoading {
+                    Spacer()
+                    ProgressView()
+                        .scaleEffect(1.5)
+                    Spacer()
+                } else if !viewModel.filteredSettlements.isEmpty {
+                    List(viewModel.filteredSettlements, id: \.self) { settlement in
                         HStack {
-                            Text(city)
+                            Text(settlement.title)
                                 .font(.system(size: 17, weight: .regular))
                                 .foregroundStyle(Color.customBlack)
                             
@@ -50,11 +48,12 @@ struct CitySelectionView: View {
                         .listRowSeparator(.hidden)
                         .background(Color.customWhite)
                         .onTapGesture {
-                            selectedCity = city
+                            viewModel.selectSettlement(settlement)
                             path.append(destination)
                         }
                     }
                     .listStyle(.plain)
+                    .padding(.bottom, 15)
                 } else {
                     Spacer()
                     Text("Город не найден")
@@ -62,7 +61,6 @@ struct CitySelectionView: View {
                         .foregroundStyle(Color.customBlack)
                     Spacer()
                 }
-                
             }
             .navigationTitle("Выбор города")
             .navigationBarTitleDisplayMode(.inline)
@@ -70,8 +68,6 @@ struct CitySelectionView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
-                        selectedCity = previousSelectedCity
-                        selectedStation = previousSelectedStation
                         path.removeLast()
                     } label: {
                         Image("backArrow")

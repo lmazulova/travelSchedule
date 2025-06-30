@@ -54,7 +54,7 @@ struct travel_scheduleApp: App {
             }
             .task {
                 let start = Date()
-                try? await StationsListService().getStationsList()
+                let result = try? await StationsListService().getSettlementsListForTrain()
                 let duration = Date().timeIntervalSince(start)
                 print(duration)
             }

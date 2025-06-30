@@ -24,7 +24,13 @@ struct MainView: View {
                     .padding(.vertical, 24)
                     .padding(.leading, 16)
                 
-                StationsSelectionSection(from: $viewModel.from, to: $viewModel.to, change: viewModel.changeDeparturePoints)
+                StationsSelectionSection(
+                    from: $viewModel.from,
+                    to: $viewModel.to,
+                    change: viewModel.changeDeparturePoints,
+                    onToTap: { viewModel.setupSelectionMode(.to) },
+                    onFromTap: { viewModel.setupSelectionMode(.from) }
+                )
                     .frame(maxWidth: .infinity)
                     .frame(height: externalViewHeight)
                     .padding(.horizontal, 16)
@@ -47,7 +53,7 @@ struct MainView: View {
                 from: $viewModel.from,
                 to: $viewModel.to,
                 path: $path,
-                filterViewModel: filterViewModel
+                mainViewModel: viewModel
             )
         }
     }

@@ -1,66 +1,51 @@
 import Foundation
 
 struct StationsListResponse: Decodable {
+    let countries: [Country]
+}
+
+struct Country: Decodable {
     let settlements: [Settlement]
+    let title: String
     
-    enum CodingKeys: CodingKey {
-        case countries
+    enum CodingKeys: String, CodingKey {
+        case regions, title
     }
     
-    private struct Countries: Decodable {
-        let title: String
+    struct Region: Decodable {
         let settlements: [Settlement]
-        
-        enum CodingKeys: String, CodingKey {
-            case regions, title
-        }
-        
-        struct Region: Decodable {
-            let settlements: [Settlement]
-        }
-        
-        init(from decoder: any Decoder) throws {
-            let container = try decoder.container(keyedBy: CodingKeys.self)
-            let regions = try container.decode([Countries.Region].self, forKey: .regions)
-            
-            self.title = try container.decode(String.self, forKey: .title)
-            let allSettlements = regions.flatMap{ $0.settlements }
-            let filteredSettlements = allSettlements.filter { $0.stations.contains(where: { $0.transportType == "train" }) }
-            self.settlements = filteredSettlements
-        }
     }
     
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let countries = try container.decode([Countries].self, forKey: .countries)
-        //Оставляем данные по России
-        guard let russia = countries.first(where: { $0.title == "Россия" }) else {
-            throw DecodingError.dataCorruptedError(forKey: .countries, in: container, debugDescription: "Russia not found in countries")
-        }
-        //Оставляем только те поселения, в которых есть станции после фильтрации по типу транспорта "поезд"
-        let allSettlements = russia.settlements.filter { !$0.stations.isEmpty }
-        self.settlements = allSettlements
+        let regions = try container.decode([Region].self, forKey: .regions)
+        self.title = try container.decode(String.self, forKey: .title)
+        self.settlements = regions.flatMap{ $0.settlements }
     }
 }
 
-struct Settlement: Decodable {
+struct Settlement: Decodable, Hashable {
+    
     let title: String
     let stations: [Station]
-
-    enum CodingKeys: CodingKey {
-        case title, stations
+    
+    enum CodingKeys: String, CodingKey {
+        case title, codes, stations
     }
     
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.title = try container.decode(String.self, forKey: .title)
-        let allStations = try container.decode([Station].self, forKey: .stations)
-        // Оставляем только станции с типом транспорта "поезд"
-        self.stations = allStations.filter { $0.transportType == "train" }
+        self.stations = try container.decode([Station].self, forKey: .stations)
+    }
+    
+    init(title: String, stations: [Station]) {
+        self.title = title
+        self.stations = stations
     }
 }
 
-struct Station: Decodable {
+struct Station: Decodable, Hashable {
     let title: String
     let code: String
     let transportType: String

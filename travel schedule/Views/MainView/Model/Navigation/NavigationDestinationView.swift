@@ -7,23 +7,23 @@
 
 import SwiftUI
 
-@ViewBuilder
+@MainActor @ViewBuilder
 func NavigationDestinationView(
     destination: Destination,
     from: Binding<DeparturePoint>,
     to: Binding<DeparturePoint>,
     path: Binding<NavigationPath>,
-    filterViewModel: FilterViewModel
+    mainViewModel: MainViewModel
 ) -> some View {
     switch destination {
     case .from:
-        CitySelectionView(destination: .stationFrom, selectedCity: from.city, selectedStation: from.station, path: path)
+        CitySelectionView(path: path, destination: .stationFrom, viewModel: mainViewModel.selectionViewModel)
     case .to:
-        CitySelectionView(destination: .stationTo, selectedCity: to.city, selectedStation: to.station, path: path)
+        CitySelectionView(path: path, destination: .stationTo, viewModel: mainViewModel.selectionViewModel)
     case .stationFrom:
-        StationSelectionView( selectedCity: from.city, selectedStation: from.station, path: path)
+        StationSelectionView(viewModel: mainViewModel.selectionViewModel, path: path)
     case .stationTo:
-        StationSelectionView(selectedCity: to.city, selectedStation: to.station, path: path)
+        StationSelectionView(viewModel: mainViewModel.selectionViewModel, path: path)
     case .listOfCarriers:
         ListOfCarriersView(title: "\(from.wrappedValue.city) (\(from.wrappedValue.station)) → \(to.wrappedValue.city) (\(to.wrappedValue.station))", path: path/*, filterViewModel: filterViewModel*/)
     case .carrierInfo:
@@ -32,6 +32,6 @@ func NavigationDestinationView(
             path: path
         )
     case .filter:
-        FilterView(path: path, filterViewModel: filterViewModel)
+        FilterView(path: path, filterViewModel: FilterViewModel())
     }
 }

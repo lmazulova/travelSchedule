@@ -4,15 +4,12 @@ struct StationSelectionView: View {
     private let iconSize: Double = 24
     private let rowHeight: Double = 60
     
-    @StateObject var viewModel = SelectionDataViewModelMock()
-    @Binding var selectedStation: String
-    @Binding var selectedCity: String
+    @StateObject var viewModel: SelectionViewModel
     @Binding var path: NavigationPath
     
-    init(selectedCity: Binding<String>, selectedStation: Binding<String>, path: Binding<NavigationPath>) {
-        self._selectedCity = selectedCity
-        self._selectedStation = selectedStation
+    init(viewModel: SelectionViewModel, path: Binding<NavigationPath>) {
         self._path = path
+        self._viewModel = StateObject(wrappedValue: viewModel)
     }
     
     var body: some View {
@@ -24,14 +21,13 @@ struct StationSelectionView: View {
                     UIApplication.shared.hideKeyboard()
                 }
 
-            
             VStack {
-                CustomSearchBar(searchText: $viewModel.searchText)
+                CustomSearchBar(searchText: $viewModel.searchStationText)
                 
-                if !viewModel.filteredRailwayStations.isEmpty {
-                    List(viewModel.filteredRailwayStations, id: \.self) { station in
+                if !viewModel.filteredStations.isEmpty {
+                    List(viewModel.filteredStations, id: \.code) { station in
                         HStack {
-                            Text(station)
+                            Text(station.title)
                                 .font(.system(size: 17, weight: .regular))
                                 .foregroundStyle(Color.customBlack)
                             
@@ -46,7 +42,7 @@ struct StationSelectionView: View {
                         .listRowSeparator(.hidden)
                         .background(Color.customWhite)
                         .onTapGesture {
-                            selectedStation = station
+                            viewModel.selectStation(station)
                             path.removeLast(path.count)
                         }
                     }
@@ -58,7 +54,6 @@ struct StationSelectionView: View {
                         .foregroundStyle(Color.customBlack)
                     Spacer()
                 }
-                
             }
             .navigationTitle("Выбор станции")
             .navigationBarTitleDisplayMode(.inline)
