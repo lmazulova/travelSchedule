@@ -3,8 +3,8 @@ import Combine
 
 @MainActor
 final class MainViewModel: ObservableObject {
-    @Published var from: DeparturePoint = DeparturePoint(city: "", station: "")
-    @Published var to: DeparturePoint = DeparturePoint(city: "", station: "")
+    @Published var from: String = ""
+    @Published var to: String = ""
     @Published var showFindButton: Bool = false
     
     private(set) var selectionViewModel: SelectionViewModel = SelectionViewModel()
@@ -20,11 +20,6 @@ final class MainViewModel: ObservableObject {
         Task {
             await loadSettlements()
         }
-    }
-    
-    var isFindButtonEnabled: Bool {
-        !from.city.isEmpty && !to.city.isEmpty &&
-        !from.station.isEmpty && !to.station.isEmpty
     }
     
     func changeDeparturePoints() {
@@ -48,36 +43,36 @@ final class MainViewModel: ObservableObject {
     
     private func setupBindings() {
         //Обновляем поля с выбранными станциями, для отображения в MainView
-        selectionViewModel.$initialSelectedSettlementFrom
-            .sink { [weak self] settlement in
-                guard let self = self,
-                      let  settlement = settlement else { return }
-                self.from.city = settlement.title
-            }
-            .store(in: &cancellables)
+//        selectionViewModel.$initialSelectedSettlementFrom
+//            .sink { [weak self] settlement in
+//                guard let self = self,
+//                      let  settlement = settlement else { return }
+//                self.from.city = settlement.title
+//            }
+//            .store(in: &cancellables)
         
         selectionViewModel.$selectedStationFrom
             .sink { [weak self] station in
                 guard let self = self,
                       let  station = station else { return }
-                self.from.station = station.title
+                self.from = station.title
                 self.listOfCarriersViewModel.from = station.code
             }
             .store(in: &cancellables)
         
-        selectionViewModel.$initialSelectedSettlementTo
-            .sink { [weak self] settlement in
-                guard let self = self,
-                      let  settlement = settlement else { return }
-                self.to.city = settlement.title
-            }
-            .store(in: &cancellables)
+//        selectionViewModel.$initialSelectedSettlementTo
+//            .sink { [weak self] settlement in
+//                guard let self = self,
+//                      let  settlement = settlement else { return }
+//                self.to.city = settlement.title
+//            }
+//            .store(in: &cancellables)
         
         selectionViewModel.$selectedStationTo
             .sink { [weak self] station in
                 guard let self = self,
                       let  station = station else { return }
-                self.to.station = station.title
+                self.to = station.title
                 self.listOfCarriersViewModel.to = station.code
             }
             .store(in: &cancellables)
@@ -85,7 +80,7 @@ final class MainViewModel: ObservableObject {
         //Проверяем можно ли показать кнопку "найти"
         Publishers.CombineLatest($from, $to)
             .map { from, to in
-                !from.city.isEmpty && !from.station.isEmpty && !to.city.isEmpty && !to.station.isEmpty
+                !from.isEmpty && !to.isEmpty
             }
             .removeDuplicates()
             .sink { [weak self] enabled in

@@ -13,8 +13,8 @@ struct StationsSelectionSection: View {
     private let iconHeight: Double = 24
     private let circleHeight: Double = 36
     
-    @Binding var from: DeparturePoint
-    @Binding var to: DeparturePoint
+    @Binding var from: String
+    @Binding var to: String
     var change: () -> Void
     var onToTap: () -> Void
     var onFromTap: () -> Void
@@ -24,10 +24,10 @@ struct StationsSelectionSection: View {
             HStack(spacing: 16) {
                 VStack(spacing: 28) {
                     NavigationLink(value: Destination.from) {
-                        Text(from.station.isEmpty ? "Откуда" : "\(from.city) (\(from.station))")
+                        Text(from.isEmpty ? "Откуда" : from )
                             .font(.system(size: 17, weight: .regular))
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .foregroundColor(from.station.isEmpty ? .customGray : .black)
+                            .foregroundColor(from.isEmpty ? .customGray : .black)
                             .lineLimit(1)
                     }
                     .simultaneousGesture(TapGesture().onEnded {
@@ -35,10 +35,10 @@ struct StationsSelectionSection: View {
                     })
                     
                     NavigationLink(value: Destination.to) {
-                        Text(to.station.isEmpty ? "Куда" : "\(to.city) (\(to.station))")
+                        Text(to.isEmpty ? "Куда" : to )
                             .font(.system(size: 17, weight: .regular))
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .foregroundColor(to.station.isEmpty ? .customGray : .black)
+                            .foregroundColor(to.isEmpty ? .customGray : .black)
                             .lineLimit(1)
                     }
                     .simultaneousGesture(TapGesture().onEnded {

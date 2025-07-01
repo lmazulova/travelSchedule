@@ -95,6 +95,7 @@ final class SelectionViewModel: ObservableObject {
         case .to:
             selectedStationTo = station
         }
+        searchStationText = ""
     }
     
     func selectSettlement(_ settlement: Settlement) {
@@ -104,5 +105,6 @@ final class SelectionViewModel: ObservableObject {
         case .to:
             selectedSettlementTo = settlement
         }
+        searchSettlementText = ""
     }
 }

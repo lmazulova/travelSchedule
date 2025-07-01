@@ -26,16 +26,11 @@ final class ListOfCarriersViewModel: ObservableObject {
         self.searchStationsService = searchStationsService
         self.filterViewModel = filterViewModel
     }
-//    init() {
-//        self.searchStationsService = SearchStationsService()
-//        self._filterViewModel = ObservedObject(wrappedValue: FilterViewModel())
-//    }
     
     func fetchAllTrainServices() async throws {
         isLoading = true
         let allStations = try await searchStationsService.searchStations(from: from, to: to)
         self.allTrainServices = allStations
-        print(allStations)
         isLoading = false
     }
 }

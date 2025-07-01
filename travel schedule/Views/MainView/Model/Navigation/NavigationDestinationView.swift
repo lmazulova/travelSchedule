@@ -10,8 +10,8 @@ import SwiftUI
 @MainActor @ViewBuilder
 func NavigationDestinationView(
     destination: Destination,
-    from: Binding<DeparturePoint>,
-    to: Binding<DeparturePoint>,
+    from: Binding<String>,
+    to: Binding<String>,
     path: Binding<NavigationPath>,
     mainViewModel: MainViewModel
 ) -> some View {
@@ -26,7 +26,7 @@ func NavigationDestinationView(
         StationSelectionView(viewModel: mainViewModel.selectionViewModel, path: path)
     case .listOfCarriers:
         ListOfCarriersView(
-            title: "\(from.wrappedValue.city) (\(from.wrappedValue.station)) → \(to.wrappedValue.city) (\(to.wrappedValue.station))",
+            title: "\(from.wrappedValue) → \(to.wrappedValue)",
             path: path,
             viewModel: mainViewModel.listOfCarriersViewModel
         )

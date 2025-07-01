@@ -21,20 +21,33 @@ struct ListOfCarriersView: View {
             VStack {
                 Text(title)
                     .font(.system(size: 24, weight: .bold))
+                    .multilineTextAlignment(.leading)
                     .padding(16)
                 
-                List(viewModel.allTrainServices) { service in
-                    CarrierRow(serviceInfo: service)
-                        .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 8, trailing: 16))
-                        .listRowSeparator(.hidden)
-                        .background(.customWhite)
-                        .onTapGesture {
-                            path.append(Destination.carrierInfo)
-                        }
-                }
-                .listStyle(.plain)
-                    
-                if !viewModel.allTrainServices.isEmpty {
+                if viewModel.isLoading {
+                    Spacer()
+                    ProgressView()
+                        .scaleEffect(1.5)
+                    Spacer()
+                } else if viewModel.allTrainServices.isEmpty {
+                    Spacer()
+                    Text("Не смогли найти подходящие рейсы для вас :(")
+                        .font(.system(size: 24, weight: .bold))
+                        .foregroundStyle(Color.customBlack)
+                        .multilineTextAlignment(.center)
+                    Spacer()
+                } else {
+                    List(viewModel.allTrainServices) { service in
+                        CarrierRow(serviceInfo: service)
+                            .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 8, trailing: 16))
+                            .listRowSeparator(.hidden)
+                            .background(.customWhite)
+                            .onTapGesture {
+                                path.append(Destination.carrierInfo)
+                            }
+                    }
+                    .listStyle(.plain)
+                      
                     Button(action: {
                         path.append(Destination.filter)
                     }) {
