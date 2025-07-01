@@ -4,7 +4,7 @@ struct CarrierRow: View {
     let serviceInfo: ServiceInformation
     private let stackHeight: Double = 104
     private let logoSize: Double = 38
-    
+
     init(serviceInfo: ServiceInformation) {
         self.serviceInfo = serviceInfo
     }
@@ -22,7 +22,7 @@ struct CarrierRow: View {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading) {
                         
-                        Text(serviceInfo.carrier)
+                        Text("РЖД")
                             .font(.system(size: 17, weight: .regular))
                             .foregroundStyle(Color.black)
                         
@@ -71,14 +71,14 @@ struct CarrierRow: View {
     }
 }
 
-#Preview {
-    CarrierRow(serviceInfo: ServiceInformation(
-        departureTime: "22:30",
-        arrivalTime: "8:15",
-        carrier: "РЖД",
-        imageURL: URL(string: "https://yastat.net/s3/rasp/media/data/company/logo/logo.gif")!,
-        isTransfer: false,
-        journeyTime: 20,
-        date: "14 января")
-        )
-}
+//#Preview {
+//    CarrierRow(serviceInfo: ServiceInformation(
+//        departureTime: "22:30",
+//        arrivalTime: "8:15",
+//        carrierCode: 332,
+//        imageURL: URL(string: "https://yastat.net/s3/rasp/media/data/company/logo/logo.gif"),
+//        isTransfer: false,
+//        journeyTime: 20,
+//        date: "14 января")
+//        )
+//}

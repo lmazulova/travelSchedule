@@ -7,7 +7,9 @@ final class MainViewModel: ObservableObject {
     @Published var to: DeparturePoint = DeparturePoint(city: "", station: "")
     @Published var showFindButton: Bool = false
     
-    var selectionViewModel: SelectionViewModel = SelectionViewModel()
+    private(set) var selectionViewModel: SelectionViewModel = SelectionViewModel()
+    //Здесь просто создаем viewModel, а коды выбранных станций пробрасываются в методе setupBindings
+    private(set) var listOfCarriersViewModel: ListOfCarriersViewModel = ListOfCarriersViewModel()
     
     private var cancellables = Set<AnyCancellable>()
     private let stationListService: StationsListServiceProtocol
@@ -16,9 +18,7 @@ final class MainViewModel: ObservableObject {
         self.stationListService = stationListService
         setupBindings()
         Task {
-            selectionViewModel.isLoading = true
             await loadSettlements()
-            selectionViewModel.isLoading = false
         }
     }
     
@@ -32,6 +32,11 @@ final class MainViewModel: ObservableObject {
     }
 
     private func loadSettlements() async {
+        selectionViewModel.isLoading = true
+        defer {
+            selectionViewModel.isLoading = false
+        }
+        
         do {
             let response = try await stationListService.getSettlementsListForTrain()
             selectionViewModel.allSettlements = response
@@ -56,6 +61,7 @@ final class MainViewModel: ObservableObject {
                 guard let self = self,
                       let  station = station else { return }
                 self.from.station = station.title
+                self.listOfCarriersViewModel.from = station.code
             }
             .store(in: &cancellables)
         
@@ -72,6 +78,7 @@ final class MainViewModel: ObservableObject {
                 guard let self = self,
                       let  station = station else { return }
                 self.to.station = station.title
+                self.listOfCarriersViewModel.to = station.code
             }
             .store(in: &cancellables)
         

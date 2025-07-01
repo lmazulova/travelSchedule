@@ -2,15 +2,17 @@ import SwiftUI
 
 struct ListOfCarriersView: View {
     private let title: String
-    @StateObject var viewModel = SelectionDataViewModelMock()
     @Binding var path: NavigationPath
+    @StateObject var viewModel: ListOfCarriersViewModel
 //    @ObservedObject var filterViewModel: FilterViewModel
     
-    init(title: String, path: Binding<NavigationPath>) {
+    init(title: String, path: Binding<NavigationPath>, viewModel: ListOfCarriersViewModel) {
         self.title = title
         self._path = path
+        self._viewModel = StateObject(wrappedValue: viewModel)
 //        self._filterViewModel = ObservedObject(wrappedValue: filterViewModel)
     }
+    
     var body: some View {
         ZStack {
             Color.customWhite
@@ -21,7 +23,7 @@ struct ListOfCarriersView: View {
                     .font(.system(size: 24, weight: .bold))
                     .padding(16)
                 
-                List(viewModel.foundRoutes) { service in
+                List(viewModel.allTrainServices) { service in
                     CarrierRow(serviceInfo: service)
                         .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 8, trailing: 16))
                         .listRowSeparator(.hidden)
@@ -31,21 +33,8 @@ struct ListOfCarriersView: View {
                         }
                 }
                 .listStyle(.plain)
-                .navigationBarBackButtonHidden(true)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button {
-                            path.removeLast()
-                        } label: {
-                            Image("backArrow")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 17, height: 22)
-                        }
-                    }
-                }
-                
-                if !viewModel.foundRoutes.isEmpty {
+                    
+                if !viewModel.allTrainServices.isEmpty {
                     Button(action: {
                         path.append(Destination.filter)
                     }) {
@@ -72,6 +61,27 @@ struct ListOfCarriersView: View {
             }
         }
         .toolbar(.hidden, for: .tabBar)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    path.removeLast()
+                } label: {
+                    Image("backArrow")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 17, height: 22)
+                }
+            }
+        }
+        .task {
+            do {
+                try await viewModel.fetchAllTrainServices()
+            } catch {
+            //Нужно вывести изображение с ошибкой
+            }
+        }
+
     }
 }
 

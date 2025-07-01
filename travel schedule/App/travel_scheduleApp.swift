@@ -52,12 +52,6 @@ struct travel_scheduleApp: App {
             .onAppear {
                 setupAppearance()
             }
-            .task {
-                let start = Date()
-                let result = try? await StationsListService().getSettlementsListForTrain()
-                let duration = Date().timeIntervalSince(start)
-                print(duration)
-            }
         }
     }
 }

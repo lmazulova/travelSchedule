@@ -25,7 +25,11 @@ func NavigationDestinationView(
     case .stationTo:
         StationSelectionView(viewModel: mainViewModel.selectionViewModel, path: path)
     case .listOfCarriers:
-        ListOfCarriersView(title: "\(from.wrappedValue.city) (\(from.wrappedValue.station)) → \(to.wrappedValue.city) (\(to.wrappedValue.station))", path: path/*, filterViewModel: filterViewModel*/)
+        ListOfCarriersView(
+            title: "\(from.wrappedValue.city) (\(from.wrappedValue.station)) → \(to.wrappedValue.city) (\(to.wrappedValue.station))",
+            path: path,
+            viewModel: mainViewModel.listOfCarriersViewModel
+        )
     case .carrierInfo:
         CarrierInfoView(
             carrierInfo: CarrierInfo.mock,
