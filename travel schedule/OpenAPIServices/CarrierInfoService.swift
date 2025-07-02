@@ -2,13 +2,7 @@ import OpenAPIRuntime
 import OpenAPIURLSession
 import Foundation
 
-typealias CarrierInfoResponse = Components.Schemas.CarrierResponce
-
-protocol CarrierInfoServiceProtocol {
-    func getCarrierInfo(code: String) async throws -> CarrierInfo
-}
-
-actor CarrierInfoService: CarrierInfoServiceProtocol {
+actor CarrierInfoService {
     
     private let client: Client
     private let apikey: String

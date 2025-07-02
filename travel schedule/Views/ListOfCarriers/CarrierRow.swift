@@ -27,7 +27,7 @@ struct CarrierRow: View {
                             .foregroundStyle(Color.black)
                         
                         if serviceInfo.isTransfer {
-                            Text("С пересадкой в Костроме")
+                            Text("С пересадкой в \(serviceInfo.transferStation ?? "")")
                                 .font(.system(size: 12, weight: .regular))
                                 .foregroundStyle(Color.customRed)
                         }

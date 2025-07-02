@@ -8,6 +8,7 @@ struct ServiceInformation: Identifiable, Sendable {
     let imageURL: URL?
     let carrierTitle: String
     let isTransfer: Bool
+    let transferStation: String?
     let journeyTime: Int
     let date: String
 }

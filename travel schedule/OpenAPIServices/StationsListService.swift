@@ -2,14 +2,7 @@ import OpenAPIRuntime
 import OpenAPIURLSession
 import Foundation
 
-typealias StationsList = Components.Schemas.StationsListResponce
-
-protocol StationsListServiceProtocol {
-    func fetchStationList() async throws -> StationsListResponse
-    func getSettlementsListForTrain() async throws -> [Settlement]
-}
-
-actor StationsListService: StationsListServiceProtocol {
+actor StationsListService {
     
     private let client: Client
     private let apikey: String
@@ -41,8 +34,7 @@ actor StationsListService: StationsListServiceProtocol {
         do {
             let response = try await client.getStationsList(
                 query: .init(
-                    apikey: apikey,
-                    format: "json"
+                    apikey: apikey
                 )
             )
             let htmlBody = try response.ok.body.html
