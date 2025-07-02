@@ -8,7 +8,7 @@ protocol SearchStationsServiceProtocol {
     func searchStations(from: String, to: String) async throws -> [ServiceInformation]
 }
 
-final class SearchStationsService: SearchStationsServiceProtocol {
+actor SearchStationsService: SearchStationsServiceProtocol {
     
     private let client: Client
     private let apikey: String

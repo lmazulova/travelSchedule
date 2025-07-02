@@ -1,6 +1,6 @@
 import Foundation
 
-struct StationsListResponse: Decodable {
+struct StationsListResponse: Decodable, Sendable {
     let countries: [Country]
 }
 
@@ -24,7 +24,7 @@ struct Country: Decodable {
     }
 }
 
-struct Settlement: Decodable, Hashable {
+struct Settlement: Decodable, Hashable, Sendable {
     
     let title: String
     let stations: [Station]
@@ -45,7 +45,7 @@ struct Settlement: Decodable, Hashable {
     }
 }
 
-struct Station: Decodable, Hashable {
+struct Station: Decodable, Hashable, Sendable {
     let title: String
     let code: String
     let transportType: String

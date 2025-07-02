@@ -41,7 +41,7 @@ struct HalfScreenTapGesture: UIViewRepresentable {
             self.onRightTap = onRightTap
         }
         
-        @objc func handleTap(_ gesture: UITapGestureRecognizer) {
+        @MainActor @objc func handleTap(_ gesture: UITapGestureRecognizer) {
             let location = gesture.location(in: gesture.view)
             guard let width = gesture.view?.bounds.width else { return }
             if location.x < width / 2 {

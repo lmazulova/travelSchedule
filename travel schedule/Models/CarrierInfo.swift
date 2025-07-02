@@ -1,6 +1,7 @@
 import Foundation
+import SwiftUI
 
-struct CarrierInfo {
+struct CarrierInfo: Sendable {
     let title: String
     let email: String
     let phoneNumber: String

@@ -37,6 +37,7 @@ final class SelectionViewModel: ObservableObject {
     
     //MARK: - Loading
     @Published var isLoading: Bool = false
+    @Published var errorType: ErrorViewType?
     
     //MARK: - Stations/Settlements
     @Published var allStations: [Station]

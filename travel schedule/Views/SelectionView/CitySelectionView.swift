@@ -30,6 +30,8 @@ struct CitySelectionView: View {
                     ProgressView()
                         .scaleEffect(1.5)
                     Spacer()
+                } else if let error = viewModel.errorType {
+                    ErrorView(errorType: error)
                 } else if !viewModel.filteredSettlements.isEmpty {
                     List(viewModel.filteredSettlements, id: \.self) { settlement in
                         HStack {

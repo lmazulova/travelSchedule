@@ -27,6 +27,8 @@ struct ListOfCarriersView: View {
                     ProgressView()
                         .scaleEffect(1.5)
                     Spacer()
+                } else if let error = viewModel.errorType {
+                    ErrorView(errorType: error)
                 } else if viewModel.filteredTrainServices.isEmpty {
                     Spacer()
                     Text("Не смогли найти подходящие рейсы для вас :(")
@@ -34,7 +36,7 @@ struct ListOfCarriersView: View {
                         .foregroundStyle(Color.customBlack)
                         .multilineTextAlignment(.center)
                     Spacer()
-                } else if !viewModel.filteredTrainServices.isEmpty {
+                } else {
                     List(viewModel.filteredTrainServices) { service in
                         CarrierRow(serviceInfo: service)
                             .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 8, trailing: 16))
@@ -88,13 +90,8 @@ struct ListOfCarriersView: View {
             }
         }
         .task {
-            do {
-                try await viewModel.fetchAllTrainServices()
-            } catch {
-            //Нужно вывести изображение с ошибкой
-            }
+            await viewModel.fetchAllTrainServices()
         }
-
     }
 }
 

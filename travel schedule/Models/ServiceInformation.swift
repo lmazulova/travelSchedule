@@ -1,6 +1,6 @@
 import Foundation
 
-struct ServiceInformation: Identifiable {
+struct ServiceInformation: Identifiable, Sendable {
     let id = UUID()
     let departureTime: String
     let arrivalTime: String

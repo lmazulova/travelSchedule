@@ -9,7 +9,7 @@ protocol StationsListServiceProtocol {
     func getSettlementsListForTrain() async throws -> [Settlement]
 }
 
-final class StationsListService: StationsListServiceProtocol {
+actor StationsListService: StationsListServiceProtocol {
     
     private let client: Client
     private let apikey: String

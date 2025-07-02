@@ -1,10 +1,3 @@
-//
-//  ListOfCarriersViewModel.swift
-//  travel schedule
-//
-//  Created by user on 29.06.2025.
-//
-
 import SwiftUI
 import Combine
 
@@ -18,22 +11,28 @@ final class ListOfCarriersViewModel: ObservableObject {
     @Published var from: String = ""
     @Published var to: String = ""
     @Published var isLoading: Bool = false
+    @Published var errorType: ErrorViewType?
     
     private var cancellables = Set<AnyCancellable>()
     
-    private let searchStationsService: SearchStationsServiceProtocol
-    
-    init(searchStationsService: SearchStationsServiceProtocol = SearchStationsService()) {
-        self.searchStationsService = searchStationsService
+    init() {
         setupBindings()
     }
     
-    func fetchAllTrainServices() async throws {
+    func fetchAllTrainServices() async {
         isLoading = true
-        let allStations = try await searchStationsService.searchStations(from: from, to: to)
-        self.allTrainServices = allStations
-        self.applyFilters()
-        isLoading = false
+        defer { isLoading = false }
+        
+        do {
+            let allStations = try await SearchStationsService().searchStations(from: from, to: to)
+            self.allTrainServices = allStations
+            self.applyFilters()
+            errorType = nil
+        } catch let error as ErrorViewType {
+            errorType = error
+        } catch {
+            errorType = .serverError
+        }
     }
     
     func selectCarrier(with code: String) {

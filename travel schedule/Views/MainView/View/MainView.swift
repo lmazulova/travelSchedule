@@ -7,11 +7,11 @@ struct MainView: View {
     // MARK: - State and Bindings
     @Binding var path: NavigationPath
     @StateObject private var filterViewModel = FilterViewModel()
-    @StateObject private var viewModel: MainViewModel
+    @ObservedObject private var viewModel: MainViewModel
     
-    init(path: Binding<NavigationPath>) {
+    init(path: Binding<NavigationPath>, viewModel: MainViewModel) {
         self._path = path
-        self._viewModel = StateObject(wrappedValue: MainViewModel())
+        self._viewModel = ObservedObject(wrappedValue: viewModel)
     }
     
     // MARK: - Body
@@ -59,11 +59,11 @@ struct MainView: View {
     }
 }
 
-#Preview {
-    NavigationStack {
-        MainView(path: .constant(NavigationPath()))
-            .environmentObject(ViewedStoriesStore())
-    }
-}
+//#Preview {
+//    NavigationStack {
+//        MainView(path: .constant(NavigationPath()))
+//            .environmentObject(ViewedStoriesStore())
+//    }
+//}
 
 

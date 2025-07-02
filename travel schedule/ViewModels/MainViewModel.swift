@@ -12,45 +12,33 @@ final class MainViewModel: ObservableObject {
     private(set) var listOfCarriersViewModel: ListOfCarriersViewModel = ListOfCarriersViewModel()
     
     private var cancellables = Set<AnyCancellable>()
-    private let stationListService: StationsListServiceProtocol
     
-    init(stationListService: StationsListServiceProtocol = StationsListService()) {
-        self.stationListService = stationListService
+    init() {
         setupBindings()
-        Task {
-            await loadSettlements()
-        }
+//        loadSettlements()
     }
     
     func changeDeparturePoints() {
         selectionViewModel.changeDeparturePoints()
     }
 
-    private func loadSettlements() async {
+    func loadSettlements() async {
         selectionViewModel.isLoading = true
-        defer {
-            selectionViewModel.isLoading = false
-        }
+        defer { selectionViewModel.isLoading = false }
         
         do {
-            let response = try await stationListService.getSettlementsListForTrain()
+            let response = try await StationsListService() .getSettlementsListForTrain()
             selectionViewModel.allSettlements = response
+            selectionViewModel.errorType = nil
+        } catch let error as ErrorViewType {
+            selectionViewModel.errorType = error
         } catch {
-            print("Ошибка загрузки settlements: \(error)")
-            selectionViewModel.allSettlements = []
+            selectionViewModel.errorType = .serverError
         }
     }
     
     private func setupBindings() {
         //Обновляем поля с выбранными станциями, для отображения в MainView
-//        selectionViewModel.$initialSelectedSettlementFrom
-//            .sink { [weak self] settlement in
-//                guard let self = self,
-//                      let  settlement = settlement else { return }
-//                self.from.city = settlement.title
-//            }
-//            .store(in: &cancellables)
-        
         selectionViewModel.$selectedStationFrom
             .sink { [weak self] station in
                 guard let self = self,
@@ -59,14 +47,6 @@ final class MainViewModel: ObservableObject {
                 self.listOfCarriersViewModel.from = station.code
             }
             .store(in: &cancellables)
-        
-//        selectionViewModel.$initialSelectedSettlementTo
-//            .sink { [weak self] settlement in
-//                guard let self = self,
-//                      let  settlement = settlement else { return }
-//                self.to.city = settlement.title
-//            }
-//            .store(in: &cancellables)
         
         selectionViewModel.$selectedStationTo
             .sink { [weak self] station in

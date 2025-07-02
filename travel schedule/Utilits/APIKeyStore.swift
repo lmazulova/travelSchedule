@@ -41,3 +41,5 @@ final class APIKeyStore {
         }
     }
 }
+
+extension APIKeyStore: @unchecked Sendable {}

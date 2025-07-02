@@ -7,6 +7,7 @@ struct travel_scheduleApp: App {
     @State var path2 = NavigationPath()
     @StateObject private var themeManager = ThemeManager()
     @StateObject var viewedStories = ViewedStoriesStore()
+    @StateObject var mainViewModel = MainViewModel()
     
     private func setupAppearance() {
         let tabBarAppearance = UITabBarAppearance()
@@ -25,7 +26,7 @@ struct travel_scheduleApp: App {
             TabView {
                 ZStack {
                     NavigationStack(path: $path1) {
-                        MainView(path: $path1)
+                        MainView(path: $path1, viewModel: mainViewModel)
                     }
                 }
                 .tabItem(){
@@ -51,6 +52,9 @@ struct travel_scheduleApp: App {
             .preferredColorScheme(themeManager.isDarkMode ? .dark : .light)
             .onAppear {
                 setupAppearance()
+            }
+            .task {
+                await mainViewModel.loadSettlements()
             }
         }
     }
