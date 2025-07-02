@@ -22,7 +22,7 @@ struct CarrierRow: View {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading) {
                         
-                        Text("РЖД")
+                        Text(serviceInfo.carrierTitle)
                             .font(.system(size: 17, weight: .regular))
                             .foregroundStyle(Color.black)
                         

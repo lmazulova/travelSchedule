@@ -33,7 +33,7 @@ final class SearchStationsService: SearchStationsServiceProtocol {
                     from: from,
                     to: to,
                     date: date,
-                    transfers: false
+                    transfers: true
                 )
             )
             
@@ -59,7 +59,8 @@ final class SearchStationsService: SearchStationsServiceProtocol {
                       let carrierCodeDouble = newSegment.thread?.value2.carrier?.value1.code,
                       let isTransfer = newSegment.has_transfers,
                       let journeyTimeSeconds = newSegment.duration,
-                      let startDate = dateFormatter.date(from: newSegment.start_date ?? "")
+                      let startDate = dateFormatter.date(from: newSegment.start_date ?? ""),
+                      let carrierTitle = newSegment.thread?.value2.carrier?.value1.title
                 else {
                     continue
                 }
@@ -67,13 +68,14 @@ final class SearchStationsService: SearchStationsServiceProtocol {
                 let departureTimeString = timeFormatter.string(from: departureDate)
                 let arrivalTimeString = timeFormatter.string(from: arrivalDate)
                 let dateString = dayMonthFormatter.string(from: startDate)
-                let carrierCode = Int(carrierCodeDouble)
+                let carrierCode = String(Int(carrierCodeDouble))
                 
                 let newService: ServiceInformation = ServiceInformation(
                     departureTime: departureTimeString,
                     arrivalTime: arrivalTimeString,
                     carrierCode: carrierCode,
                     imageURL: URL(string: newSegment.thread?.value2.carrier?.value1.logo ?? ""),
+                    carrierTitle: carrierTitle,
                     isTransfer: isTransfer,
                     journeyTime: Int(ceil(journeyTimeSeconds / 3600)),
                     date: dateString

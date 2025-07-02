@@ -5,6 +5,7 @@ enum SelectionMode {
     case from
     case to
 }
+
 @MainActor
 final class SelectionViewModel: ObservableObject {
     //Делаем одну VM для выбора и станции отправления, и станции прибытия

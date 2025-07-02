@@ -4,8 +4,9 @@ struct ServiceInformation: Identifiable {
     let id = UUID()
     let departureTime: String
     let arrivalTime: String
-    let carrierCode: Int
+    let carrierCode: String
     let imageURL: URL?
+    let carrierTitle: String
     let isTransfer: Bool
     let journeyTime: Int
     let date: String

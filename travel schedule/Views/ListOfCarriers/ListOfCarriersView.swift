@@ -4,13 +4,11 @@ struct ListOfCarriersView: View {
     private let title: String
     @Binding var path: NavigationPath
     @StateObject var viewModel: ListOfCarriersViewModel
-//    @ObservedObject var filterViewModel: FilterViewModel
     
     init(title: String, path: Binding<NavigationPath>, viewModel: ListOfCarriersViewModel) {
         self.title = title
         self._path = path
         self._viewModel = StateObject(wrappedValue: viewModel)
-//        self._filterViewModel = ObservedObject(wrappedValue: filterViewModel)
     }
     
     var body: some View {
@@ -29,25 +27,27 @@ struct ListOfCarriersView: View {
                     ProgressView()
                         .scaleEffect(1.5)
                     Spacer()
-                } else if viewModel.allTrainServices.isEmpty {
+                } else if viewModel.filteredTrainServices.isEmpty {
                     Spacer()
                     Text("Не смогли найти подходящие рейсы для вас :(")
                         .font(.system(size: 24, weight: .bold))
                         .foregroundStyle(Color.customBlack)
                         .multilineTextAlignment(.center)
                     Spacer()
-                } else {
-                    List(viewModel.allTrainServices) { service in
+                } else if !viewModel.filteredTrainServices.isEmpty {
+                    List(viewModel.filteredTrainServices) { service in
                         CarrierRow(serviceInfo: service)
                             .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 8, trailing: 16))
                             .listRowSeparator(.hidden)
                             .background(.customWhite)
                             .onTapGesture {
+                                viewModel.selectCarrier(with: service.carrierCode)
                                 path.append(Destination.carrierInfo)
                             }
                     }
                     .listStyle(.plain)
-                      
+                }
+                if !viewModel.allTrainServices.isEmpty {
                     Button(action: {
                         path.append(Destination.filter)
                     }) {
@@ -55,11 +55,11 @@ struct ListOfCarriersView: View {
                             Text("Уточнить время")
                                 .font(.system(size: 17, weight: .bold))
                                 .foregroundColor(.white)
-//                            if filterViewModel.isTransfer || !filterViewModel.selectedTime.isEmpty {
-//                                Circle()
-//                                    .fill(Color.customRed)
-//                                    .frame(width: 8, height: 8)
-//                            }
+                            if !viewModel.filterViewModel.isTransfer || !viewModel.filterViewModel.selectedTime.isEmpty {
+                                Circle()
+                                    .fill(Color.customRed)
+                                    .frame(width: 8, height: 8)
+                            }
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .background(Color.customBlue)

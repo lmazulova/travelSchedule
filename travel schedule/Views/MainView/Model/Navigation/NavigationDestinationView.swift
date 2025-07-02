@@ -32,10 +32,10 @@ func NavigationDestinationView(
         )
     case .carrierInfo:
         CarrierInfoView(
-            carrierInfo: CarrierInfo.mock,
-            path: path
+            path: path,
+            viewModel: mainViewModel.listOfCarriersViewModel.carrierInfoViewModel
         )
     case .filter:
-        FilterView(path: path, filterViewModel: FilterViewModel())
+        FilterView(path: path, filterViewModel: mainViewModel.listOfCarriersViewModel.filterViewModel)
     }
 }

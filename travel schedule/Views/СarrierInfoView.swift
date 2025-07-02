@@ -2,16 +2,14 @@ import SwiftUI
 
 struct CarrierInfoView: View {
     @Binding var path: NavigationPath
-    @StateObject private var viewModel = CarrierInfoViewModel()
-    
-    let carrierInfo: CarrierInfo
+    @ObservedObject private var viewModel: CarrierInfoViewModel
     
     private let stackHeight: Double = 60
     private let logoHeight: Double = 104
     
-    init(carrierInfo: CarrierInfo, path: Binding<NavigationPath>) {
-        self.carrierInfo = carrierInfo
+    init(path: Binding<NavigationPath>, viewModel: CarrierInfoViewModel) {
         self._path = path
+        self._viewModel = ObservedObject(wrappedValue: viewModel)
     }
     
     var body: some View {
@@ -57,22 +55,20 @@ struct CarrierInfoView: View {
     
     private var logoView: some View {
         Group {
-            if let imageURL = carrierInfo.imageURL {
-                AsyncImage(url: imageURL) { content in
-                    content.image?
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(height: logoHeight)
-                        .padding([.leading, .trailing], 16)
-                }
-                .background(Color.white)
-                .clipShape(.rect(cornerRadius: 24))
+            AsyncImage(url: viewModel.carrierInfo?.imageURL) { content in
+                content.image?
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(height: logoHeight)
+                    .padding([.leading, .trailing], 16)
             }
+            .background(Color.white)
+            .clipShape(.rect(cornerRadius: 24))
         }
     }
     
     private var titleView: some View {
-        Text(carrierInfo.title)
+        Text(viewModel.carrierInfo?.title ?? "")
             .font(.system(size: 24, weight: .bold))
             .frame(maxWidth: .infinity, alignment: .leading)
             .foregroundColor(.customBlack)
@@ -80,8 +76,8 @@ struct CarrierInfoView: View {
     
     private var contactStack: some View {
         VStack {
-            contactItem(title: "E-mail", value: carrierInfo.email)
-            contactItem(title: "Телефон", value: carrierInfo.phoneNumber)
+            contactItem(title: "E-mail", value: (viewModel.carrierInfo?.email ?? "").isEmpty ? "нет информации" : viewModel.carrierInfo?.email ?? "")
+            contactItem(title: "Телефон", value: (viewModel.carrierInfo?.phoneNumber ?? "").isEmpty ? "нет информации" : viewModel.carrierInfo?.phoneNumber ?? "")
         }
     }
     
@@ -112,11 +108,10 @@ struct CarrierInfoView: View {
     }
 }
 
-#Preview {
-    NavigationStack {
-        CarrierInfoView(
-            carrierInfo: CarrierInfo.mock,
-            path: .constant(NavigationPath())
-        )
-    }
-}
+//#Preview {
+//    NavigationStack {
+//        CarrierInfoView(
+//            path: .constant(NavigationPath())
+//        )
+//    }
+//}
