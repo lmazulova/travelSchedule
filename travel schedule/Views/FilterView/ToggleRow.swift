@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ToggleRaw: View {
+struct ToggleRowView: View {
     private let title: String
     private var rowHeight: Double = 60
     private let iconSize: Double = 24
@@ -31,5 +31,11 @@ struct ToggleRaw: View {
 }
 
 #Preview {
-//    ToggleRaw(title: "Да", isSelected: false)
+    struct ToggleRowViewPreviews: View {
+        @State private var isSelected = false
+        var body: some View {
+            ToggleRowView(title: "Да", isSelected: $isSelected)
+        }
+    }
+    return ToggleRowViewPreviews()
 }

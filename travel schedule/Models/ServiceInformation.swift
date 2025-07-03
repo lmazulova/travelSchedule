@@ -1,22 +1,14 @@
 import Foundation
 
-struct ServiceInformation: Identifiable {
+struct ServiceInformation: Identifiable, Sendable {
     let id = UUID()
     let departureTime: String
     let arrivalTime: String
-    let carrier: String
-    let imageURL: URL
+    let carrierCode: String
+    let imageURL: URL?
+    let carrierTitle: String
     let isTransfer: Bool
+    let transferStation: String?
     let journeyTime: Int
     let date: String
-    
-    init(departureTime: String, arrivalTime: String, carrier: String, imageURL: URL, isTransfer: Bool, journeyTime: Int, date: String) {
-        self.departureTime = departureTime
-        self.arrivalTime = arrivalTime
-        self.carrier = carrier
-        self.imageURL = imageURL
-        self.isTransfer = isTransfer
-        self.journeyTime = journeyTime
-        self.date = date
-    }
 }

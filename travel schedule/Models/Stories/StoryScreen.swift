@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct StoriesScreen: Identifiable {
+struct StoryScreen: Identifiable {
     let id = UUID()
     let title: String
     let description: String

@@ -26,7 +26,7 @@ struct FilterView: View {
                         .padding(.bottom, 16)
                     
                     ForEach(TimeRange.allCases, id: \.self) { range in
-                        TimeRaw(time: range, selectedTime: $filterViewModel.selectedTime)
+                        TimeRowView(time: range, selectedTime: $filterViewModel.selectedTime)
                     }
                 }
                 VStack(alignment: .leading, spacing: 0) {
@@ -35,8 +35,8 @@ struct FilterView: View {
                         .foregroundColor(.customBlack)
                         .padding(.bottom, 16)
                     
-                    ToggleRaw(title: "Да", isSelected: $filterViewModel.isTransfer)
-                    ToggleRaw(
+                    ToggleRowView(title: "Да", isSelected: $filterViewModel.isTransfer)
+                    ToggleRowView(
                         title: "Нет",
                         isSelected: Binding(
                             get: { !filterViewModel.isTransfer },
@@ -87,5 +87,13 @@ struct FilterView: View {
 }
 
 #Preview {
-//    FilterView()
+    struct FilterViewPreview: View {
+        @State private var path = NavigationPath()
+        @StateObject private var filterViewModel = FilterViewModel()
+        var body: some View {
+            FilterView(path: $path, filterViewModel: filterViewModel)
+            
+        }
+    }
+    return FilterViewPreview()
 }

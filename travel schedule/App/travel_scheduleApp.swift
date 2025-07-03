@@ -7,24 +7,26 @@ struct travel_scheduleApp: App {
     @State var path2 = NavigationPath()
     @StateObject private var themeManager = ThemeManager()
     @StateObject var viewedStories = ViewedStoriesStore()
+    @StateObject var mainViewModel = MainViewModel()
     
     private func setupAppearance() {
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.configureWithOpaqueBackground()
-        tabBarAppearance.shadowColor = themeManager.isDarkMode ? .black : .customGray // Используйте .gray вместо .customGray
+        tabBarAppearance.shadowColor = themeManager.isDarkMode ? .black : .customGray
         tabBarAppearance.backgroundColor = UIColor(named: "customWhite")
         
         UITabBar.appearance().standardAppearance = tabBarAppearance
         UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+        APIKeyStore.shared.saveAPIKey("d0eeeb52-67fa-48f2-8131-c568596dca7c") //заменить на свой ключ API при запуске
     }
     
     var body: some Scene {
         
         WindowGroup {
-        TabView {
+            TabView {
                 ZStack {
                     NavigationStack(path: $path1) {
-                        MainView(path: $path1)
+                        MainView(path: $path1, viewModel: mainViewModel)
                     }
                 }
                 .tabItem(){
@@ -50,6 +52,9 @@ struct travel_scheduleApp: App {
             .preferredColorScheme(themeManager.isDarkMode ? .dark : .light)
             .onAppear {
                 setupAppearance()
+            }
+            .task {
+                await mainViewModel.loadSettlements()
             }
         }
     }

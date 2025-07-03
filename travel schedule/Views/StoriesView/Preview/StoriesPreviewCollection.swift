@@ -14,19 +14,15 @@ enum StoryConstants {
 
 struct StoriesPreviewCollection: View {
     @EnvironmentObject var viewedStories: ViewedStoriesStore
-    @State private var selectedStories: Stories? = nil
+    @State private var selectedStories: Story? = nil
     
-    private let stories: [Stories] = [.stories1, .stories2, .stories3, .stories4, .stories5, .stories6, .stories7, .stories8, .stories9]
-    
-//    init(stories: [Story]) {
-//        self.stories = stories
-//    }
+    private let stories: [Story] = [.story1, .story2, .story3, .story4, .story5, .story6, .story7, .story8, .story9]
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 12) {
                 ForEach(stories) { stories in
-                    StoriesPreviewRow(story: stories, isSeen: viewedStories.isViewed(stories.id))
+                    StoriesPreviewRowView(story: stories, isSeen: viewedStories.isViewed(stories.id))
                         .onTapGesture {
                             selectedStories = stories
                         }
@@ -43,7 +39,7 @@ struct StoriesPreviewCollection: View {
     }
 }
 
-
 #Preview {
     StoriesPreviewCollection()
+        .environmentObject(ViewedStoriesStore())
 }

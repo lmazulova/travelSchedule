@@ -68,5 +68,7 @@ struct SettingsView: View {
 }
 
 #Preview {
-    //    SettingsView()
+    SettingsView(path: .constant(NavigationPath()))
+        .environmentObject(ThemeManager())
 }
+

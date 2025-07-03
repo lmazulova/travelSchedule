@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct StoriesView: View {
-    let stories: [StoriesScreen]
+    let stories: [StoryScreen]
     private var timerConfiguration: TimerConfiguration { .init(storiesCount: stories.count) }
     @State var currentStoryIndex: Int = 0
     @State var currentProgress: CGFloat = 0
@@ -62,4 +62,21 @@ struct StoriesView: View {
             currentStoryIndex = index
         }
     }
+}
+
+#Preview {
+    StoriesView(
+        stories: [
+            StoryScreen(
+                title: "Story 1",
+                description: "Description 1",
+                image: Image("firstImage1")
+            ),
+            StoryScreen(
+                title: "Story 2",
+                description: "Description 2",
+                image: Image("firstImage2")
+            )
+        ]
+    )
 }
